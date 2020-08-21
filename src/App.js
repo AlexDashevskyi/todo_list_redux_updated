@@ -1,26 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
+import {connect} from 'react-redux'
 import './App.css';
+import TodoCreateForm from './TodoCreateForm';
+import Dashboard from "./Dashboard";
+import { uuid } from 'uuidv4';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+function App(props) {
+
+    return (
+
+        <div className="App">
+
+            <TodoCreateForm/>
+            {props.todos.map((el, i) =>
+                <Dashboard
+                    title={el.title}
+                    id={el.id}
+                    done={el.done}
+                    key={uuid()}
+            />)}
+            <button onClick={() => props.deleteAll()}>delete all</button>
+        </div>
+    );
 }
-
-export default App;
+const mapStateToProps = (state) => ({
+    todos: state.todos
+});
+const mapDispatchToProps = (dispatch) => ({
+    deleteAll: (todo) => dispatch({type: 'DELETE_ALL', payload: todo}),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(App);
