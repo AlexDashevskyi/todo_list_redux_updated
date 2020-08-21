@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import './App.css';
 import TodoCreateForm from './TodoCreateForm';
 import Dashboard from "./Dashboard";
-import { uuid } from 'uuidv4';
+import {uuid} from 'uuidv4';
 
 
 function App(props) {
@@ -17,13 +17,16 @@ function App(props) {
                 <Dashboard
                     title={el.title}
                     id={el.id}
+                    index={i}
                     done={el.done}
                     key={uuid()}
-            />)}
+                    length={props.todos.length}
+                />)}
             <button onClick={() => props.deleteAll()}>delete all</button>
         </div>
     );
 }
+
 const mapStateToProps = (state) => ({
     todos: state.todos
 });

@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 
 function Dashboard(props) {
 
-    const {done, id, title} = props;
+    const {done, id, index, title, length} = props;
 
     const [updateTodo, setUpdateTodo] = useState(props.todos.title);
     const [editMode, setEditMode] = useState(false);
@@ -14,6 +14,12 @@ function Dashboard(props) {
         props.editTodo(todoId, updateTodo)
         setEditMode(false);
         setUpdateTodo(props.todos.title)
+    };
+    const moveUp = (index) => {
+      props.moveUp(index)
+    };
+ const moveDown = (index) => {
+      props.moveDown(index)
     };
 
     if (editMode) {
@@ -28,9 +34,11 @@ function Dashboard(props) {
             <div>
                 <span style={titleStyle}>
                 {title}
-                <input type='checkbox' checked={done} onChange={() => props.toggleTodo(id, done)}/>
+                    <input type='checkbox' checked={done} onChange={() => props.toggleTodo(id, done)}/>
                 <button onClick={() => setEditMode(true)}>edit</button>
                 <button onClick={() => props.deleteTodo(id)}>X</button>
+                    <button onClick={() => moveUp(index)} disabled={index === 0}>↑</button>
+                    <button onClick={() => moveDown(index)} disabled={index === length-1}>↓</button>
                 </span>
             </div>
         );
@@ -43,6 +51,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     deleteTodo: (todoId) => dispatch({type: 'DELETE_TODO', payload: todoId}),
     editTodo: (todoId, newTitle) => dispatch({type: 'EDIT_TODO', payload: {todoId, newTitle}}),
-    toggleTodo: (todoId) => dispatch({type: 'TOGGLE_TODO', payload: todoId})
+    toggleTodo: (todoId) => dispatch({type: 'TOGGLE_TODO', payload: todoId}),
+    moveUp: (index) => dispatch({type: 'MOVE_UP', payload: index}),
+    moveDown: (index) => dispatch({type: 'MOVE_DOWN', payload: index})
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

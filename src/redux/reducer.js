@@ -61,6 +61,28 @@ const todo = (state = initialState, action) => {
                     return el;
                 })
             }
+        case 'MOVE_UP':
+            let newUpList = [...state.todos]
+            let firstUpIndex = newUpList[action.payload];
+            let secondUpIndex = newUpList[action.payload - 1];
+            newUpList[action.payload] = secondUpIndex;
+            newUpList[action.payload - 1] = firstUpIndex
+            // [firstUpIndex, secondUpIndex] = [secondUpIndex, firstUpIndex];
+            return {
+                ...state,
+                todos: [...newUpList]
+            }
+        case 'MOVE_DOWN':
+            let newDownList = [...state.todos]
+            let firstDownIndex = newDownList[action.payload];
+            let secondDownIndex = newDownList[action.payload + 1];
+            newDownList[action.payload] = secondDownIndex;
+            newDownList[action.payload + 1] = firstDownIndex
+            // [newUpList[action.payload], newUpList[action.payload + 1]] = [newUpList[action.payload + 1], newUpList[action.payload]];
+            return {
+                ...state,
+                todos: [...newDownList]
+            }
         default:
             return state;
     }
