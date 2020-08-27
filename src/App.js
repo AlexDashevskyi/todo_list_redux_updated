@@ -1,12 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {connect} from 'react-redux'
 import './App.css';
 import TodoCreateForm from './TodoCreateForm';
 import Dashboard from "./Dashboard";
-import {uuid} from 'uuidv4';
+import {getTodos} from "./redux/action";
 
 
 function App(props) {
+
+    useEffect(() => {
+        props.getList();
+    }, [])
 
     return (
 
@@ -15,11 +19,11 @@ function App(props) {
             <TodoCreateForm/>
             {props.todos.map((el, i) =>
                 <Dashboard
-                    title={el.title}
-                    id={el.id}
+                    title={el.name}
+                    _id={el._id}
                     index={i}
                     done={el.done}
-                    key={uuid()}
+                    key={Math.random()}
                     length={props.todos.length}
                 />)}
             <button onClick={() => props.deleteAll()}>delete all</button>
@@ -32,5 +36,6 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
     deleteAll: (todo) => dispatch({type: 'DELETE_ALL', payload: todo}),
+    getList: () => dispatch(getTodos())
 });
 export default connect(mapStateToProps, mapDispatchToProps)(App);
